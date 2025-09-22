@@ -43,7 +43,9 @@ export async function POST(req: NextRequest) {
             try {
                 const urlObj = new URL(image);
                 image = urlObj.pathname.replace(/^\/+/, "");
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
         }
 
         const imageFileName = title
@@ -76,10 +78,15 @@ tags: []
             title,
             image: `/images/${image}`,
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error(error);
+        let errorMessage = "Failed to parse page";
+        if (error && typeof error === "object" && "message" in error) {
+            errorMessage =
+                (error as { message?: string }).message || errorMessage;
+        }
         return NextResponse.json(
-            { success: false, error: error.message || "Failed to parse page" },
+            { success: false, error: errorMessage },
             { status: 500 },
         );
     }

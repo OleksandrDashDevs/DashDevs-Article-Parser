@@ -16,6 +16,7 @@ export const MainInHomePage = () => {
             navigator.clipboard.writeText(articleParsedData).then(() => {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000); // повідомлення "скопійовано" на 2 секунди
+                console.log(copied);
             });
         }
     };
