@@ -15,7 +15,7 @@ export const MainInHomePage = () => {
         if (typeof articleParsedData === "string") {
             navigator.clipboard.writeText(articleParsedData).then(() => {
                 setCopied(true);
-                setTimeout(() => setCopied(false), 2000); // повідомлення "скопійовано" на 2 секунди
+                setTimeout(() => setCopied(false), 2000);
                 console.log(copied);
             });
         }
@@ -28,7 +28,7 @@ export const MainInHomePage = () => {
             </ReactMarkdown>
             <Button
                 variant='outlined'
-                disabled={articleParsedData.length > 0 ? false : true}
+                // disabled={articleParsedData.length > 0 ? false : true}
                 sx={{
                     height: "56px",
                     borderColor: "#BCC3CD",
