@@ -1,44 +1,77 @@
 "use client";
-import { useState } from "react";
+
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+import { RootState } from "@/app/store/store";
 import { Button } from "@mui/material";
+import { toast } from "react-toastify";
+
+import styles from "./MainInHomePage.module.css";
 
 export const MainInHomePage = () => {
     const articleParsedData = useSelector(
         (state: RootState) => state.articles.articleParsedData,
     );
-    const [copied, setCopied] = useState(false);
-    const handleCopy = () => {
-        if (typeof articleParsedData === "string") {
-            navigator.clipboard.writeText(articleParsedData).then(() => {
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
-                console.log(copied);
+    const articleTitle = useSelector(
+        (state: RootState) => state.articles.articleTitle,
+    );
+
+    const { wrapper } = styles;
+
+    // const handleCopy = () => {
+    //     if (typeof articleParsedData === "string") {
+    //         navigator.clipboard.writeText(articleParsedData);
+    //         toast.success("Скопійовано в буфер");
+    //     }
+    // };
+
+    const handleDownload = () => {
+        if (
+            typeof articleParsedData === "string" &&
+            articleParsedData.length > 0
+        ) {
+            const blob = new Blob([articleParsedData], {
+                type: "text/markdown",
             });
+            const url = URL.createObjectURL(blob);
+
+            const safeTitle = articleTitle
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${safeTitle}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            toast.success("Файл збережено");
         }
     };
+
     return (
-        <main>
-            {" "}
+        <main className={wrapper}>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {typeof articleParsedData === "string" ? articleParsedData : ""}
+                {articleParsedData?.length > 0 ? articleParsedData : ""}
             </ReactMarkdown>
             <Button
                 variant='outlined'
-                // disabled={articleParsedData.length > 0 ? false : true}
+                disabled={articleParsedData?.length > 0 ? false : true}
                 sx={{
                     height: "56px",
                     borderColor: "#BCC3CD",
-                    marginLeft: "20px",
+                    marginTop: "20px",
                     color: "#090B0E",
                     borderRadius: "6px",
                 }}
-                onClick={handleCopy}
+                onClick={handleDownload}
             >
-                Скопіювати результат
+                Завантажити файл
             </Button>
         </main>
     );

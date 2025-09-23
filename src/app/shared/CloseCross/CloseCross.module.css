@@ -1,0 +1,10 @@
+.drawerCrossLogo {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    color: #546881;
+    border: none;
+    cursor: pointer;
+    background: url("../../../../public/icons/cross_close_drawer.svg") center
+        no-repeat;
+}

@@ -1,3 +1,13 @@
 export interface IArticlesInitialState {
-    articleParsedData: [];
+    articleParsedData: string;
+    articleTitle: string;
+}
+
+export interface ITagDrawer {
+    openDrawer: boolean;
+    toggleDrawer: (open: boolean) => void;
+}
+
+export interface ICloseCross {
+    onClick: () => void;
 }

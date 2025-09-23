@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IArticlesInitialState } from "@/app/interfaces/articles";
 
 const initialState: IArticlesInitialState = {
-    articleParsedData: [],
+    articleParsedData: "",
+    articleTitle: "",
 };
 
 const articlesSlice = createSlice({
@@ -12,8 +13,11 @@ const articlesSlice = createSlice({
         setParsedArticleData: (state, action) => {
             state.articleParsedData = action.payload;
         },
+        setArticleTitle: (state, action) => {
+            state.articleTitle = action.payload;
+        },
     },
 });
 
-export const { setParsedArticleData } = articlesSlice.actions;
+export const { setParsedArticleData, setArticleTitle } = articlesSlice.actions;
 export default articlesSlice.reducer;

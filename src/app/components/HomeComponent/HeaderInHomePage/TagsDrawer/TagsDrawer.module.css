@@ -1,0 +1,10 @@
+.drawerContainer {
+    width: 400px;
+    padding: 10px;
+}
+
+.titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

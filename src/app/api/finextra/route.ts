@@ -65,28 +65,36 @@ tags: []
         articleContent.find("p:not([class])").each((_, el) => {
             const text = $(el).text().trim();
             if (text) {
-                content += `${text}\n\n`;
+                const sentences = text.split(/(?<=[.?!])(?=\s+|[A-ZА-ЯЇЄІ])/);
+
+                sentences.forEach(sentence => {
+                    const clean = sentence.trim();
+                    if (clean) {
+                        content += `${clean}\n\n`;
+                    }
+                });
             }
         });
 
-        const finalDoc = `${frontMatter}\n\n${content}`;
+        let finalDoc = `${frontMatter}${content}`;
+        finalDoc = finalDoc.trimEnd() + "\n";
 
         return NextResponse.json({
             success: true,
-            message: "Article parsed successfully",
+            message: "Парсин статті пройвош усіпшно",
             markdown: finalDoc,
             title,
             image: `/images/${image}`,
         });
     } catch (error: unknown) {
         console.error(error);
-        let errorMessage = "Failed to parse page";
+        let errorMessage = "Помилка під час процесу парсингу";
         if (error && typeof error === "object" && "message" in error) {
             errorMessage =
                 (error as { message?: string }).message || errorMessage;
         }
         return NextResponse.json(
-            { success: false, error: errorMessage },
+            { success: false, message: errorMessage },
             { status: 500 },
         );
     }

@@ -1,6 +1,10 @@
 import { useDispatch } from "react-redux";
 import { setLoading } from "../store/ui/ui";
-import { setParsedArticleData } from "../store/articles/articles";
+import {
+    setParsedArticleData,
+    setArticleTitle,
+} from "../store/articles/articles";
+import { toast } from "react-toastify";
 
 export const useParseArticle = () => {
     const dispatch = useDispatch();
@@ -15,8 +19,11 @@ export const useParseArticle = () => {
             });
 
             const result = await res.json();
-            console.log(result.markdown);
+            console.log(result);
+            toast[result.success ? "success" : "error"](result.message);
+
             dispatch(setParsedArticleData(result.markdown));
+            dispatch(setArticleTitle(result.title));
             return result;
         } catch (error) {
             return {
