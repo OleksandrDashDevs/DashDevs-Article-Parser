@@ -4,13 +4,13 @@ import type { AnyNode } from "domhandler";
 
 export function articleParse($: cheerio.CheerioAPI, articleContent: unknown) {
     let content = "";
-
     const skipClasses = [
         "card-baseline",
         "button",
         "content-box",
         "article-authorDetails",
     ];
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const processElement = (el: any) => {
         const $el = $(el);
