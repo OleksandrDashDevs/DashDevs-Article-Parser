@@ -50,3 +50,20 @@ export const inputStyles = {
         },
     },
 };
+
+export const tags = [
+    "mobile app development",
+    "outsourcing",
+    "fintech",
+    "trends",
+    "recruiting",
+    "regtech",
+    "software development",
+    "case study",
+    "product management",
+    "security",
+    "product development",
+    "design",
+    "banking",
+    "business development",
+];

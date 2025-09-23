@@ -1,6 +1,7 @@
 export interface IArticlesInitialState {
     articleParsedData: string;
     articleTitle: string;
+    selectedTags: string[];
 }
 
 export interface ITagDrawer {

@@ -1,31 +1,23 @@
 "use client";
 
-import { useSelector } from "react-redux";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { useSelector, useDispatch } from "react-redux";
+import { setParsedArticleData } from "@/app/store/articles/articles";
 
 import { RootState } from "@/app/store/store";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 
 import styles from "./MainInHomePage.module.css";
+const { wrapper, parsedArticleTextArea } = styles;
 
 export const MainInHomePage = () => {
+    const dispatch = useDispatch();
     const articleParsedData = useSelector(
         (state: RootState) => state.articles.articleParsedData,
     );
     const articleTitle = useSelector(
         (state: RootState) => state.articles.articleTitle,
     );
-
-    const { wrapper } = styles;
-
-    // const handleCopy = () => {
-    //     if (typeof articleParsedData === "string") {
-    //         navigator.clipboard.writeText(articleParsedData);
-    //         toast.success("Скопійовано в буфер");
-    //     }
-    // };
 
     const handleDownload = () => {
         if (
@@ -54,11 +46,17 @@ export const MainInHomePage = () => {
         }
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(setParsedArticleData(e.target.value));
+    };
+
     return (
         <main className={wrapper}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {articleParsedData?.length > 0 ? articleParsedData : ""}
-            </ReactMarkdown>
+            <textarea
+                value={articleParsedData}
+                onChange={handleChange}
+                className={parsedArticleTextArea}
+            />
             <Button
                 variant='outlined'
                 disabled={articleParsedData?.length > 0 ? false : true}

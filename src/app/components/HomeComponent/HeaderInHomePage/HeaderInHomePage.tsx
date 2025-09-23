@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { TextField, Button } from "@mui/material";
 import { useParseArticle } from "@/app/hooks/useParseArticle";
-import { setParsedArticleData } from "@/app/store/articles/articles";
+import { clearAllFields, setSelectedTags } from "@/app/store/articles/articles";
 import { TagDrawer } from "./TagsDrawer/TagsDrawer";
 
 import styles from "./HeaderInHomePage.module.css";
@@ -26,6 +26,7 @@ export const HeaderInHomePage = () => {
     };
 
     const handleParceArticle = () => {
+        dispatch(setSelectedTags([]));
         articleParse(articleSrc);
     };
 
@@ -57,7 +58,7 @@ export const HeaderInHomePage = () => {
                 }}
                 onClick={() => {
                     setArticleSrc("");
-                    dispatch(setParsedArticleData(""));
+                    dispatch(clearAllFields());
                 }}
             >
                 Очистити
@@ -78,7 +79,7 @@ export const HeaderInHomePage = () => {
             </Button>
             <Button
                 variant='outlined'
-                // disabled={articleSrc.length > 0 ? false : true}
+                disabled={articleSrc.length > 0 ? false : true}
                 sx={{
                     height: "56px",
                     borderColor: "#BCC3CD",

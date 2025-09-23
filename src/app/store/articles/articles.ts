@@ -4,6 +4,7 @@ import { IArticlesInitialState } from "@/app/interfaces/articles";
 const initialState: IArticlesInitialState = {
     articleParsedData: "",
     articleTitle: "",
+    selectedTags: [],
 };
 
 const articlesSlice = createSlice({
@@ -16,8 +17,21 @@ const articlesSlice = createSlice({
         setArticleTitle: (state, action) => {
             state.articleTitle = action.payload;
         },
+        setSelectedTags: (state, action) => {
+            state.selectedTags = [...action.payload];
+        },
+        clearAllFields: state => {
+            state.articleParsedData = "";
+            state.articleTitle = "";
+            state.selectedTags = [];
+        },
     },
 });
 
-export const { setParsedArticleData, setArticleTitle } = articlesSlice.actions;
+export const {
+    setParsedArticleData,
+    setArticleTitle,
+    setSelectedTags,
+    clearAllFields,
+} = articlesSlice.actions;
 export default articlesSlice.reducer;

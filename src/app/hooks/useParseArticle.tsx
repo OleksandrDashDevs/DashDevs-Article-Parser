@@ -19,7 +19,6 @@ export const useParseArticle = () => {
             });
 
             const result = await res.json();
-            console.log(result);
             toast[result.success ? "success" : "error"](result.message);
 
             dispatch(setParsedArticleData(result.markdown));

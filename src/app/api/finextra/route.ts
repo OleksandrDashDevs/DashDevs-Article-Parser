@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as cheerio from "cheerio";
 import axios from "axios";
+import { articleParse } from "@/app/helpers/articleParse";
 
 export async function POST(req: NextRequest) {
     try {
@@ -15,8 +16,7 @@ export async function POST(req: NextRequest) {
         }
 
         const response = await axios.get(url);
-        const htmlContent = response.data;
-        const $ = cheerio.load(htmlContent);
+        const $ = cheerio.load(response.data);
 
         const articleContent = $(".article-content");
         if (!articleContent.length) {
@@ -34,65 +34,54 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        const rawDate = $("time.card-timestamp").attr("datetime") || "";
+        let date = "";
+        if (rawDate) {
+            try {
+                date = new Date(rawDate).toISOString();
+            } catch {}
+        }
+
         let image =
             $('meta[property="og:image"]').attr("content") ||
             articleContent.find("img").first().attr("src") ||
             "";
-
         if (image.startsWith("http")) {
             try {
-                const urlObj = new URL(image);
-                image = urlObj.pathname.replace(/^\/+/, "");
-            } catch (e) {
-                console.log(e);
-            }
+                image = new URL(image).pathname.replace(/^\/+/, "");
+            } catch {}
         }
-
         const imageFileName = title
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "-")
             .replace(/^-+|-+$/g, "");
 
         const frontMatter = `---
-title: "${title}"
-image: "/images/${imageFileName}.webp"
+linktitle: "${title}"
+image_preview: "/images/${imageFileName}.webp"
+date: ${date}
 tags: []
+seo: []
 ---
 `;
 
-        let content = `# ${title}\n\nWebsite: [${url}](${url})\n\n`;
-
-        articleContent.find("p:not([class])").each((_, el) => {
-            const text = $(el).text().trim();
-            if (text) {
-                const sentences = text.split(/(?<=[.?!])(?=\s+|[A-ZА-ЯЇЄІ])/);
-
-                sentences.forEach(sentence => {
-                    const clean = sentence.trim();
-                    if (clean) {
-                        content += `${clean}\n\n`;
-                    }
-                });
-            }
-        });
-
-        let finalDoc = `${frontMatter}${content}`;
-        finalDoc = finalDoc.trimEnd() + "\n";
+        const contentMarkdown = articleParse($, articleContent);
+        const finalDoc = `${frontMatter}# ${title}\n\nWebsite: [${url}](${url})\n\n${contentMarkdown}`;
 
         return NextResponse.json({
             success: true,
-            message: "Парсин статті пройвош усіпшно",
+            message: "Парсинг статті пройшов успішно",
             markdown: finalDoc,
             title,
-            image: `/images/${image}`,
+            image: `/images/${imageFileName}.webp`,
         });
     } catch (error: unknown) {
         console.error(error);
-        let errorMessage = "Помилка під час процесу парсингу";
-        if (error && typeof error === "object" && "message" in error) {
-            errorMessage =
-                (error as { message?: string }).message || errorMessage;
-        }
+        const errorMessage =
+            error && typeof error === "object" && "message" in error
+                ? (error as { message?: string }).message ||
+                  "Помилка під час процесу парсингу"
+                : "Помилка під час процесу парсингу";
         return NextResponse.json(
             { success: false, message: errorMessage },
             { status: 500 },
