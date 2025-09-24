@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { chromium } from "playwright";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
 import { articleParse } from "@/app/helpers/articleParse";
 import * as cheerio from "cheerio";
 
@@ -14,57 +15,40 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    let browser;
+    let browser = null;
     try {
-        browser = await chromium.launch({ headless: true });
-        const context = await browser.newContext({
-            userAgent:
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            viewport: { width: 1280, height: 800 },
+        const executablePath = await chromium.executablePath();
+        browser = await puppeteer.launch({
+            executablePath,
+            args: chromium.args,
+            headless: true,
         });
-        const page = await context.newPage();
 
+        const page = await browser.newPage();
         await page.goto(url, { waitUntil: "domcontentloaded" });
-
         const html = await page.content();
+        const $ = cheerio.load(html);
 
-        await browser.close();
-
-        const data = cheerio.load(html);
-
-        const articleContent = data(".ArticleBase-Body");
-
+        const articleContent = $(".ArticleBase-Body");
         if (!articleContent.length) {
             return NextResponse.json(
                 { success: false, message: "article-content not found" },
                 { status: 404 },
             );
         }
-        const h1 = data("h1.ArticleBase-HeaderTitle").first();
+
+        const h1 = $("h1.ArticleBase-HeaderTitle").first();
         const title = h1
             .find('span[data-testid="article-title"]')
             .first()
             .text()
             .trim();
-        const rawDate = data("p.Contributors-Date").text().trim() || "";
-        let date = "";
+        const rawDate = $("p.Contributors-Date").text().trim() || "";
+        const date = rawDate ? new Date(rawDate).toISOString() : "";
 
-        if (rawDate) {
-            const parsedDate = new Date(rawDate);
-            if (!isNaN(parsedDate.getTime())) date = parsedDate.toISOString();
-        }
+        const frontMatter = `---\nlinktitle: "${title}"\nimage_preview: ""\ndate: ${date}\ntags: []\nseo_description: ""\nseo_keywords: ""\n---`;
 
-        const frontMatter = `---
-linktitle: "${title}"
-image_preview: ""
-date: ${date}
-tags: []
-seo_description: ""
-seo_keywords: ""
----
-`;
-
-        const contentMarkdown = articleParse(data, articleContent);
+        const contentMarkdown = articleParse($, articleContent);
         const finalDoc = `${frontMatter}# ${title}\n\n${contentMarkdown}\n\nWebsite: [${url}](${url})`;
 
         return NextResponse.json({
@@ -74,11 +58,12 @@ seo_keywords: ""
             title,
         });
     } catch (error) {
-        if (browser) await browser.close();
         console.error(error);
         return NextResponse.json(
             { success: false, message: "Помилка при парсингу" },
             { status: 500 },
         );
+    } finally {
+        if (browser) await browser.close();
     }
 }
