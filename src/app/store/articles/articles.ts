@@ -4,6 +4,7 @@ import { IArticlesInitialState } from "@/app/interfaces/articles";
 const initialState: IArticlesInitialState = {
     articleParsedData: "",
     articleTitle: "",
+    fileName: "",
     selectedTags: [],
 };
 
@@ -17,12 +18,16 @@ const articlesSlice = createSlice({
         setArticleTitle: (state, action) => {
             state.articleTitle = action.payload;
         },
+        setFileName: (state, action) => {
+            state.fileName = action.payload;
+        },
         setSelectedTags: (state, action) => {
             state.selectedTags = [...action.payload];
         },
         clearAllFields: state => {
             state.articleParsedData = "";
             state.articleTitle = "";
+            state.fileName = "";
             state.selectedTags = [];
         },
     },
@@ -33,5 +38,6 @@ export const {
     setArticleTitle,
     setSelectedTags,
     clearAllFields,
+    setFileName,
 } = articlesSlice.actions;
 export default articlesSlice.reducer;

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         const response = await axios.get(url);
         const data = cheerio.load(response.data);
 
-        const articleContent = data(".article-content");
+        const articleContent = data(".main__content__wrapper");
         if (!articleContent.length) {
             return NextResponse.json(
                 { success: false, message: "article-content not found" },
@@ -33,13 +33,21 @@ export async function POST(req: NextRequest) {
                 { status: 404 },
             );
         }
-
-        const rawDate = data("time.card-timestamp").attr("datetime") || "";
+        const rawDate = data("p.post__date").text().trim() || "";
         let date = "";
+
         if (rawDate) {
             try {
-                date = new Date(rawDate).toISOString();
-            } catch {}
+                const parsedDate = new Date(rawDate);
+
+                if (!isNaN(parsedDate.getTime())) {
+                    date = parsedDate.toISOString();
+                } else {
+                    console.warn("Could not parse date:", rawDate);
+                }
+            } catch (e) {
+                console.error("Date parsing error:", e);
+            }
         }
 
         const frontMatter = `---

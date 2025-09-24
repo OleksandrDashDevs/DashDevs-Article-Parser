@@ -1,6 +1,7 @@
 export interface IArticlesInitialState {
     articleParsedData: string;
     articleTitle: string;
+    fileName: string;
     selectedTags: string[];
 }
 

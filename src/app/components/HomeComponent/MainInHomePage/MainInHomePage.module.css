@@ -3,7 +3,7 @@
 }
 .parsedArticleTextArea {
     width: 100%;
-    min-height: 700px;
+    min-height: 400px;
     padding: 16px;
     font-family: monospace;
     font-size: 20px;
@@ -11,4 +11,12 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     resize: vertical;
+    margin-bottom: 16px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 200px;
 }

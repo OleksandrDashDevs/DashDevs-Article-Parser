@@ -48,9 +48,6 @@ export const TagDrawer = ({ openDrawer, toggleDrawer }: ITagDrawer) => {
             const frontMatterStart = lines.indexOf("---");
             const frontMatterEnd = lines.indexOf("---", frontMatterStart + 1);
 
-            console.log("Front Matter Start:", frontMatterStart);
-            console.log("Front Matter End:", frontMatterEnd);
-
             if (frontMatterStart !== -1 && frontMatterEnd !== -1) {
                 const frontMatterLines = lines.slice(
                     frontMatterStart + 1,
@@ -73,8 +70,6 @@ export const TagDrawer = ({ openDrawer, toggleDrawer }: ITagDrawer) => {
                     "---",
                     ...contentLines,
                 ].join("\n");
-
-                console.log(updatedArticle);
                 dispatch(setParsedArticleData(updatedArticle));
             }
         } else {
@@ -90,7 +85,7 @@ export const TagDrawer = ({ openDrawer, toggleDrawer }: ITagDrawer) => {
         >
             <div className={drawerContainer}>
                 <div className={titleContainer}>
-                    <h2>Список доступних тегів</h2>
+                    <h2>Tag list</h2>
                     <CloseCross onClick={() => toggleDrawer(false)} />
                 </div>
                 <ul className={drawerListingList}>

@@ -9,6 +9,17 @@ export function articleParse($: cheerio.CheerioAPI, articleContent: unknown) {
         "button",
         "content-box",
         "article-authorDetails",
+        "post__date",
+        "scriptlesssocialsharing",
+        "post__participants",
+        "post__companies",
+        "ArticleBase-Contributors",
+        "related-article",
+        "ArticleBase-More",
+        "SocialShare",
+        "ArticleBase-ContributorsWrapper",
+        "ArticleBase-Footer",
+        "ArticleBase-IirisRecommendation",
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

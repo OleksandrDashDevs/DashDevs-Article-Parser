@@ -40,7 +40,7 @@ export const HeaderInHomePage = () => {
             <TextField
                 type='text'
                 id='outlined-error-helper-text'
-                label='Вставте посилання статті'
+                label='Insert the article link'
                 variant='outlined'
                 sx={{ ...inputStyles.root, width: "800px" }}
                 value={articleSrc}
@@ -61,7 +61,7 @@ export const HeaderInHomePage = () => {
                     dispatch(clearAllFields());
                 }}
             >
-                Очистити
+                Clear all fields
             </Button>
             <Button
                 variant='outlined'
@@ -75,7 +75,7 @@ export const HeaderInHomePage = () => {
                 }}
                 onClick={handleParceArticle}
             >
-                Розпарсити статтю
+                Parse the article
             </Button>
             <Button
                 variant='outlined'
@@ -89,7 +89,7 @@ export const HeaderInHomePage = () => {
                 }}
                 onClick={() => toggleDrawer(true)}
             >
-                Теги
+                Tags
             </Button>
             <TagDrawer openDrawer={openDrawer} toggleDrawer={toggleDrawer} />
         </header>
