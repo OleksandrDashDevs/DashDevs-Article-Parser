@@ -80,6 +80,7 @@ export async function POST(req: NextRequest) {
             fileExists: true,
             message: "Файл з такою назвою вже існує",
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         if (err.status === 404) {
             try {
@@ -100,6 +101,7 @@ export async function POST(req: NextRequest) {
                     data: createResponse.data,
                     message: "Файл успішно завантажено до репозиторію",
                 });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (createErr: any) {
                 return NextResponse.json(
                     {
