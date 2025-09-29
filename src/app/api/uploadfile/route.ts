@@ -1,0 +1,119 @@
+// import { NextRequest, NextResponse } from "next/server";
+// import { Octokit } from "octokit";
+
+// export async function POST(req: NextRequest) {
+//     const body = await req.json();
+//     const { fileName, commitMessage, content } = body;
+
+//     if (!fileName || !commitMessage || !content) {
+//         return NextResponse.json(
+//             { message: "Missing required fields" },
+//             { status: 400 },
+//         );
+//     }
+
+//     const octokit = new Octokit({
+//         auth: process.env.GITHUB_TOKEN_CLASSIC,
+//     });
+
+//     try {
+//         const response = await octokit.request(
+//             "GET /repos/{owner}/{repo}/contents/{path}",
+//             {
+//                 owner: "dashdevs",
+//                 repo: "fintech-garden-frontend",
+//                 path: `content/news/${fileName}`,
+//                 ref: "master",
+//             },
+//         );
+
+//         console.log("Repo root contents:", response);
+
+//         return NextResponse.json({
+//             success: true,
+//             fileExists: true,
+//         });
+//     } catch (err: any) {
+//         if (err.status === 404) {
+//             console.log(err.status);
+//             return NextResponse.json({
+//                 success: true,
+//                 folderExists: false,
+//             });
+//         }
+
+//         return NextResponse.json(
+//             { success: false, error: err.response?.data || err.message },
+//             { status: err.status || 500 },
+//         );
+//     }
+// }
+
+import { NextRequest, NextResponse } from "next/server";
+import { Octokit } from "octokit";
+
+export async function POST(req: NextRequest) {
+    const body = await req.json();
+    const { fileName, commitMessage, content } = body;
+
+    if (!fileName || !commitMessage || !content) {
+        return NextResponse.json(
+            { message: "Missing required fields" },
+            { status: 400 },
+        );
+    }
+
+    const octokit = new Octokit({
+        auth: process.env.GITHUB_TOKEN_CLASSIC,
+    });
+
+    try {
+        await octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {
+            owner: "dashdevs",
+            repo: "fintech-garden-frontend",
+            path: `content/news/${fileName}`,
+            ref: "master",
+        });
+
+        return NextResponse.json({
+            success: true,
+            fileExists: true,
+            message: "Файл з такою назвою вже існує",
+        });
+    } catch (err: any) {
+        if (err.status === 404) {
+            try {
+                const createResponse = await octokit.request(
+                    "PUT /repos/{owner}/{repo}/contents/{path}",
+                    {
+                        owner: "dashdevs",
+                        repo: "fintech-garden-frontend",
+                        path: `content/news/${fileName}`,
+                        message: commitMessage,
+                        content: Buffer.from(content).toString("base64"),
+                        branch: "master",
+                    },
+                );
+                return NextResponse.json({
+                    success: true,
+                    fileCreated: true,
+                    data: createResponse.data,
+                    message: "Файл успішно завантажено до репозиторію",
+                });
+            } catch (createErr: any) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: createErr.response?.data || createErr.message,
+                    },
+                    { status: createErr.status || 500 },
+                );
+            }
+        }
+
+        return NextResponse.json(
+            { success: false, error: err.response?.data || err.message },
+            { status: err.status || 500 },
+        );
+    }
+}

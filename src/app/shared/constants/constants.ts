@@ -66,4 +66,14 @@ export const tags = [
     "design",
     "banking",
     "business development",
+    "payments",
+    "technology",
 ];
+
+export const buttonStyles = {
+    height: "56px",
+    borderColor: "#BCC3CD",
+    marginLeft: "20px",
+    color: "#090B0E",
+    borderRadius: "6px",
+};

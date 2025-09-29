@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import axios from "axios";
 import { setLoading } from "../store/ui/ui";
 import {
     setParsedArticleData,
@@ -19,8 +20,6 @@ export const useParseArticle = () => {
                 route = "/api/ffnews";
             } else if (url.includes("finextra")) {
                 route = "/api/finextra";
-            } else if (url.includes("fintechfutures")) {
-                route = "/api/fintechfutures";
             }
 
             if (!route) {
@@ -31,26 +30,21 @@ export const useParseArticle = () => {
                 };
             }
 
-            const res = await fetch(route, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url }),
-            });
-
-            const result = await res.json();
-            toast[result.success ? "success" : "error"](result.message);
-
-            dispatch(setParsedArticleData(result.markdown));
-            dispatch(setArticleTitle(result.title));
-            dispatch(
-                setFileName(
-                    result.title
-                        .toLowerCase()
-                        .replace(/[^a-z0-9]+/g, "-")
-                        .replace(/^-+|-+$/g, ""),
-                ),
+            const res = await axios.post(
+                route,
+                { url },
+                {
+                    headers: { "Content-Type": "application/json" },
+                },
             );
-            return result;
+
+            const data = res.data;
+            toast[data.success ? "success" : "error"](`${data.message}`);
+
+            dispatch(setParsedArticleData(data.markdown));
+            dispatch(setArticleTitle(data.title));
+            dispatch(setFileName(`${data.date.slice(0, 10)} ${data.title}`));
+            return data;
         } catch (error) {
             return {
                 success: false,

@@ -6,19 +6,19 @@
         "dev": "next dev --turbopack",
         "build": "next build --turbopack",
         "start": "next start",
-        "lint": "eslint",
-        "postinstall": "node ./scripts/downloadChromium.js"
+        "lint": "eslint"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
+        "@mui/icons-material": "^7.3.2",
         "@mui/material": "^7.3.2",
         "@reduxjs/toolkit": "^2.9.0",
-        "@sparticuz/chromium": "^138.0.2",
         "axios": "^1.12.2",
         "cheerio": "^1.1.2",
+        "env": "^0.0.2",
         "next": "15.5.3",
-        "puppeteer-core": "^24.22.2",
+        "octokit": "^5.0.3",
         "react": "19.1.0",
         "react-dom": "19.1.0",
         "react-markdown": "^10.1.0",
@@ -34,7 +34,6 @@
         "@types/turndown": "^5.0.5",
         "eslint": "^9",
         "eslint-config-next": "15.5.3",
-        "playwright": "^1.55.1",
         "typescript": "^5"
     }
 }

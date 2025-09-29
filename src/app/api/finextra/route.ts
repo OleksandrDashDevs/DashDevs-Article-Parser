@@ -42,6 +42,14 @@ export async function POST(req: NextRequest) {
             } catch {}
         }
 
+        let displayUrl = url;
+        try {
+            const { hostname } = new URL(url);
+            displayUrl = hostname.replace(/^www\./, "");
+        } catch {
+            displayUrl = url;
+        }
+
         const frontMatter = `---
 linktitle: "${title}"
 image_preview: ""
@@ -53,13 +61,14 @@ seo_keywords: ""
 `;
 
         const contentMarkdown = articleParse(data, articleContent);
-        const finalDoc = `${frontMatter}# ${title}\n\n${contentMarkdown}\n\nWebsite: [${url}](${url})`;
+        const finalDoc = `${frontMatter}# ${title}\n\n${contentMarkdown}\n\n[${displayUrl}](${url})`;
 
         return NextResponse.json({
             success: true,
             message: "Парсинг статті пройшов успішно",
             markdown: finalDoc,
             title,
+            date,
         });
     } catch (error: unknown) {
         console.error(error);

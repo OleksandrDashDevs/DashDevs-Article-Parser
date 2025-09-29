@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -8,14 +9,14 @@ import { clearAllFields, setSelectedTags } from "@/app/store/articles/articles";
 import { TagDrawer } from "./TagsDrawer/TagsDrawer";
 
 import styles from "./HeaderInHomePage.module.css";
-import { inputStyles } from "@/app/shared/constants/constants";
+import { inputStyles, buttonStyles } from "@/app/shared/constants/constants";
 
 export const HeaderInHomePage = () => {
+    const dispatch = useDispatch();
     const [articleSrc, setArticleSrc] = useState<string>("");
     const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
     const { articleParse } = useParseArticle();
-    const dispatch = useDispatch();
 
     const { headerWrapper, title } = styles;
 
@@ -49,13 +50,7 @@ export const HeaderInHomePage = () => {
             <Button
                 variant='outlined'
                 disabled={articleSrc.length > 0 ? false : true}
-                sx={{
-                    height: "56px",
-                    borderColor: "#BCC3CD",
-                    marginLeft: "20px",
-                    color: "#090B0E",
-                    borderRadius: "6px",
-                }}
+                sx={buttonStyles}
                 onClick={() => {
                     setArticleSrc("");
                     dispatch(clearAllFields());
@@ -66,13 +61,7 @@ export const HeaderInHomePage = () => {
             <Button
                 variant='outlined'
                 disabled={articleSrc.length > 0 ? false : true}
-                sx={{
-                    height: "56px",
-                    borderColor: "#BCC3CD",
-                    marginLeft: "20px",
-                    color: "#090B0E",
-                    borderRadius: "6px",
-                }}
+                sx={buttonStyles}
                 onClick={handleParceArticle}
             >
                 Parse the article
@@ -80,13 +69,7 @@ export const HeaderInHomePage = () => {
             <Button
                 variant='outlined'
                 disabled={articleSrc.length > 0 ? false : true}
-                sx={{
-                    height: "56px",
-                    borderColor: "#BCC3CD",
-                    marginLeft: "20px",
-                    color: "#090B0E",
-                    borderRadius: "6px",
-                }}
+                sx={buttonStyles}
                 onClick={() => toggleDrawer(true)}
             >
                 Tags
