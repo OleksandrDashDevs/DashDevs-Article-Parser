@@ -98,4 +98,6 @@ export const skipClasses = [
     "recommended-articles",
     "akismet-fields-container",
     "free-articles-prompt-intro",
+    "yf-eondll",
+    "yf-1woyvo2",
 ];

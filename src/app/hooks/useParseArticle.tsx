@@ -22,6 +22,8 @@ export const useParseArticle = () => {
                 route = "/api/finextra";
             } else if (url.includes("pymnts")) {
                 route = "/api/pymnts";
+            } else if (url.includes("yahoo")) {
+                route = "/api/yahoo";
             }
 
             if (!route) {
