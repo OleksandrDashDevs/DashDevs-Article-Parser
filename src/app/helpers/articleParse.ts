@@ -1,26 +1,10 @@
 import * as cheerio from "cheerio";
 import type { Cheerio as CheerioType } from "cheerio";
 import type { AnyNode } from "domhandler";
+import { skipClasses } from "../shared/constants/constants";
 
 export function articleParse($: cheerio.CheerioAPI, articleContent: unknown) {
     let content = "";
-    const skipClasses = [
-        "card-baseline",
-        "button",
-        "content-box",
-        "article-authorDetails",
-        "post__date",
-        "scriptlesssocialsharing",
-        "post__participants",
-        "post__companies",
-        "ArticleBase-Contributors",
-        "related-article",
-        "ArticleBase-More",
-        "SocialShare",
-        "ArticleBase-ContributorsWrapper",
-        "ArticleBase-Footer",
-        "ArticleBase-IirisRecommendation",
-    ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const processElement = (el: any) => {

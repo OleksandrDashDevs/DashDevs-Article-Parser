@@ -20,6 +20,8 @@ export const useParseArticle = () => {
                 route = "/api/ffnews";
             } else if (url.includes("finextra")) {
                 route = "/api/finextra";
+            } else if (url.includes("pymnts")) {
+                route = "/api/pymnts";
             }
 
             if (!route) {

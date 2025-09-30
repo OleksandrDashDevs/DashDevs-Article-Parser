@@ -32,12 +32,11 @@ export const MainInHomePage = () => {
         ) {
             const commitMessage = `Download file ${fileName}.md`;
 
-            const result = await uploadFile({
+            await uploadFile({
                 fileName: `${fileName}.md`,
                 content: articleParsedData,
                 commitMessage,
             });
-            console.log(result);
         }
     };
 

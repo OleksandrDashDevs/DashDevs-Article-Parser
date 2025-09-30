@@ -77,3 +77,25 @@ export const buttonStyles = {
     color: "#090B0E",
     borderRadius: "6px",
 };
+
+export const skipClasses = [
+    "card-baseline",
+    "button",
+    "content-box",
+    "article-authorDetails",
+    "post__date",
+    "scriptlesssocialsharing",
+    "post__participants",
+    "post__companies",
+    "ArticleBase-Contributors",
+    "related-article",
+    "ArticleBase-More",
+    "SocialShare",
+    "ArticleBase-ContributorsWrapper",
+    "ArticleBase-Footer",
+    "ArticleBase-IirisRecommendation",
+    "pymnt-content",
+    "recommended-articles",
+    "akismet-fields-container",
+    "free-articles-prompt-intro",
+];
