@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             success: true,
             fileExists: true,
-            message: "Файл з такою назвою вже існує",
+            message: "A file with this name already exists.",
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
                     success: true,
                     fileCreated: true,
                     data: createResponse.data,
-                    message: "Файл успішно завантажено до репозиторію",
+                    message: "The file has been successfully uploaded to the repository.",
                 });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (createErr: any) {

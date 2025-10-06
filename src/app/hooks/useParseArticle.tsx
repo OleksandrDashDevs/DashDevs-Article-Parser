@@ -22,9 +22,11 @@ export const useParseArticle = () => {
                 route = "/api/finextra";
             } else if (url.includes("pymnts")) {
                 route = "/api/pymnts";
-            } else if (url.includes("yahoo")) {
+            } else if (url.includes("yahoo")) {                
                 route = "/api/yahoo";
-            }
+            } else if (url.includes("fintechfutures")) {                
+                route = "/api/fintechfutures";
+            } 
 
             if (!route) {
                 toast.error("Unsupported website.");

@@ -65,7 +65,7 @@ seo_keywords: ""
 
         return NextResponse.json({
             success: true,
-            message: "Парсинг статті пройшов успішно",
+            message: "Article parsing was successful.",
             markdown: finalDoc,
             title,
             date,
@@ -75,8 +75,8 @@ seo_keywords: ""
         const errorMessage =
             error && typeof error === "object" && "message" in error
                 ? (error as { message?: string }).message ||
-                  "Помилка під час процесу парсингу"
-                : "Помилка під час процесу парсингу";
+                  "Error during the parsing process."
+                : "Error during the parsing process.";
         return NextResponse.json(
             { success: false, message: errorMessage },
             { status: 500 },

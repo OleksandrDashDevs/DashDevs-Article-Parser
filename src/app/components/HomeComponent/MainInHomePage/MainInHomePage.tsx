@@ -24,7 +24,7 @@ export const MainInHomePage = () => {
         (state: RootState) => state.articles.articleParsedData,
     );
     const fileName = useSelector((state: RootState) => state.articles.fileName);
-
+    
     const handleUpload = async () => {
         if (
             typeof articleParsedData === "string" &&
@@ -46,8 +46,11 @@ export const MainInHomePage = () => {
     const handleChangeArticleTitle = (
         e: React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
-        dispatch(setFileName(e.target.value));
+        const value = e.target.value;        
+        const sanitizedValue = value.replace(/[^a-zA-Zа-яА-Я0-9 -]/g, '');        
+        dispatch(setFileName(sanitizedValue));
     };
+
 
     return (
         <main className={wrapper}>
@@ -55,6 +58,8 @@ export const MainInHomePage = () => {
                 value={articleParsedData}
                 onChange={handleChange}
                 className={parsedArticleTextArea}
+                id="parsed-article"
+                name="parsed-article"
             />
             {articleParsedData?.length > 0 ? <MarkDownResult /> : null}
 
@@ -66,6 +71,15 @@ export const MainInHomePage = () => {
                     variant='outlined'
                     sx={{ ...inputStyles.root, width: "800px" }}
                     value={fileName}
+                    onChange={handleChangeArticleTitle}
+                />
+                <TextField
+                    type='text'
+                    id='outlined-error-helper-text'
+                    label='URL name'
+                    variant='outlined'
+                    sx={{ ...inputStyles.root, width: "800px" }}
+                    value={fileName.toLowerCase().replace(/\s+/g, "-")}
                     onChange={handleChangeArticleTitle}
                 />
                 <Button
