@@ -1,4 +1,5 @@
-import { chromium } from 'playwright';
+import chromium from '@sparticuz/chromium';
+import puppeteer from 'puppeteer-core';
 import * as cheerio from "cheerio";
 import { NextRequest, NextResponse } from "next/server";
 import { articleParse } from "@/app/helpers/articleParse";
@@ -11,11 +12,13 @@ export async function POST(req: NextRequest) {
         if (!url) {
             return NextResponse.json({ success: false, message: "URL is required" }, { status: 400 });
         }
-        
-        const browser = await chromium.launch({
+
+        const browser = await puppeteer.launch({
+            args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
+            executablePath: await chromium.executablePath(),
             headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
         });
+
         const page = await browser.newPage();
 
         await page.setExtraHTTPHeaders({
@@ -29,17 +32,14 @@ export async function POST(req: NextRequest) {
         await browser.close();
 
         const $ = cheerio.load(htmlContent);
-        
-        const articleContent = $(".ContentModule-Wrapper"); 
+        const articleContent = $(".ContentModule-Wrapper");
 
         if (!articleContent.length) {
-            console.warn("Article content not found. Спробуй інший селектор.");
             return NextResponse.json({ success: false, message: "article-content not found" }, { status: 404 });
         }
 
         const title = $(".ArticleBase-LargeTitle").first().text().trim();
         if (!title) {
-            console.warn("H1 title not found");
             return NextResponse.json({ success: false, message: "H1 title not found" }, { status: 404 });
         }
 
