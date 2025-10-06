@@ -17,6 +17,7 @@
         "@sparticuz/chromium": "^141.0.0",
         "axios": "^1.12.2",
         "cheerio": "^1.1.2",
+        "chrome-aws-lambda": "^10.1.0",
         "env": "^0.0.2",
         "next": "15.5.3",
         "octokit": "^5.0.3",
