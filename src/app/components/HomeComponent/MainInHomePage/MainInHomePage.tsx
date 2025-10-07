@@ -15,7 +15,7 @@ import { RootState } from "@/app/store/store";
 import styles from "./MainInHomePage.module.css";
 
 import { inputStyles } from "@/app/shared/constants/constants";
-const { wrapper, parsedArticleTextArea, inputContainer } = styles;
+const { wrapper, parsedArticleTextArea, inputContainer, spanElement } = styles;
 
 export const MainInHomePage = () => {
     const dispatch = useDispatch();
@@ -24,7 +24,7 @@ export const MainInHomePage = () => {
         (state: RootState) => state.articles.articleParsedData,
     );
     const fileName = useSelector((state: RootState) => state.articles.fileName);
-    
+
     const handleUpload = async () => {
         if (
             typeof articleParsedData === "string" &&
@@ -46,11 +46,10 @@ export const MainInHomePage = () => {
     const handleChangeArticleTitle = (
         e: React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
-        const value = e.target.value;        
-        const sanitizedValue = value.replace(/[^a-zA-Zа-яА-Я0-9 -]/g, '');        
+        const value = e.target.value;
+        const sanitizedValue = value.replace(/[^a-zA-Zа-яА-Я0-9 -]/g, "");
         dispatch(setFileName(sanitizedValue));
     };
-
 
     return (
         <main className={wrapper}>
@@ -58,8 +57,8 @@ export const MainInHomePage = () => {
                 value={articleParsedData}
                 onChange={handleChange}
                 className={parsedArticleTextArea}
-                id="parsed-article"
-                name="parsed-article"
+                id='parsed-article'
+                name='parsed-article'
             />
             {articleParsedData?.length > 0 ? <MarkDownResult /> : null}
 
@@ -96,6 +95,21 @@ export const MainInHomePage = () => {
                 >
                     Upload file to github
                 </Button>
+            </div>
+            <div>
+                <p>Supported sites</p>
+                <ul>
+                    <li>https://www.finextra.com/</li>
+                    <li>https://www.pymnts.com/</li>
+                    <li>https://uk.finance.yahoo.com/</li>
+                    <li>https://ffnews.com/</li>
+                    <li>
+                        https://www.fintechfutures.com/{" "}
+                        <span className={spanElement}>
+                            for developers only (local use)
+                        </span>
+                    </li>
+                </ul>
             </div>
         </main>
     );
